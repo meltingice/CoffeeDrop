@@ -1,6 +1,5 @@
 require 'rubygems'
 require 'grit'
-require 'logger'
 
 include Grit
 
@@ -12,6 +11,12 @@ class FSWatcher
 		
 		@interval = options[:interval] || 5
 		@run = options[:run] || true
+		@log = Logger.new('log/git.log', 10, 10240000);
+		if RubyDrop.config['rubydrop_debug'] then
+			@log.level = Logger::DEBUG
+		else
+			@log.level = Logger::WARN
+		end
 	
 		# Check to make sure the root directory exists
 		if !File.directory? RubyDrop.config['rubydrop_root'] then
@@ -22,10 +27,10 @@ class FSWatcher
 		# Now check to see if it's a git repository or not
 		Dir.chdir(RubyDrop.config['rubydrop_root']) do
 			if !File.directory? ".git" then
-				puts "Creating git repository..."
+				@log.info("Creating git repository...")
 				@repo = Repo.init('.')
 			else
-				puts "Opening git repository..."
+				@log.info("Opening git repository...")
 				@repo = Repo.new('.')
 			end
 		end
@@ -46,53 +51,53 @@ class FSWatcher
 	def start()
 		Dir.chdir(RubyDrop.config['rubydrop_root']) do
 			while @run do
-				puts "\n====== Checking Folder Status ======"
+				@log.info("====== Checking Folder Status ======")
 				
 				add_count = 0
 				change_count = 0
 				
 				@repo.status.each do |file|
 					if file.untracked then
-						puts "Untracked: " + file.path
+						@log.info("Untracked: " + file.path)
 						add_count += 1
 						change_count += 1
 					elsif file.type == 'A' then
-						puts "Added: " + file.path
+						@log.info("Added: " + file.path)
 						
 						change_count += 1
 					elsif file.type == 'M' then
-						puts "Changed: " + file.path
+						@log.info("Changed: " + file.path)
 						
 						change_count += 1
 					elsif file.type == 'D' then
-						puts "Deleted: " + file.path
+						@log.info("Deleted: " + file.path)
 						
 						change_count += 1
 					end
 				end
 				
 				if add_count == 0 && change_count == 0 then
-					puts "No changes"
+					@log.info("No changes")
 				end
 				
 				if add_count > 0 then
-					puts add_count.to_s + " files added, adding..."
+					@log.info(add_count.to_s + " files added, adding...")
 					@repo.add('.')
 				end
 				
 				if change_count > 0 then
-					puts change_count.to_s + " files changed, committing..."
+					@log.info(change_count.to_s + " files changed, committing...")
 					if @repo.commit_all(change_count.to_s + " files updated") then
-						puts "Files committed!"
+						@log.info("Files committed!")
 					else
-						puts "Error committing files?"
+						@log.error("Error committing files?")
 					end
 				end
 				
 				add_count = 0
 				change_count = 0
 				
-				puts "====== End Folder Status ======"
+				@log.info("====== End Folder Status ======")
 							
 				# wait for however many seconds before checking again
 				sleep @interval

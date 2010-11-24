@@ -12,7 +12,7 @@ class RubyDrop
 		@@config['rubydrop_root'] = @@config['rubydrop_root'] || "~/RubyDrop"
 		@@config['rubydrop_root'] = File.expand_path(@@config['rubydrop_root'])
 		
-		if ARGV.size > 0 then
+		if @@config['git_debug'] then
 			Grit.debug = true
 		end
 		
