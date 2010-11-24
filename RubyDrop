@@ -1,6 +1,6 @@
 #! /usr/bin/env ruby
-require "yaml"
-require_relative "lib/rubydrop"
+
+require "./lib/rubydrop"
 
 # Check to make sure we aren't running in Windows
 if RUBY_PLATFORM =~ /(win|w)32$/ then
