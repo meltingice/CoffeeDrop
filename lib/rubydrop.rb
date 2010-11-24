@@ -1,6 +1,7 @@
 require "fileutils"
 require "yaml"
 require_relative "fswatcher"
+require_relative "tcp_listen"
 
 class RubyDrop
 	
@@ -18,6 +19,7 @@ class RubyDrop
 		
 		# Create the filesystem watcher
 		@watcher = FSWatcher.new()
+		TcpListen.new().start()
 	end
 	
 	public

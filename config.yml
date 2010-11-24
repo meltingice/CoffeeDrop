@@ -3,12 +3,14 @@
 # Lets you turn debugging mode on and off
 git_debug: false
 rubydrop_debug: true
+tcp_debug: true
 
 # The local filepath where you want to monitor files
 rubydrop_root: ~/RubyDrop
 
-# The address of the server you would like to sync with
-remote_addr: meltingice.net
+# The IP that the TCP server should listen on that will let you send
+# commands to the RubyDrop daemon
+tcp_listen_ip: 127.0.0.1
 
-# ... and the port
-remote_port: 6789
+# The port that the TCP server should listen on
+tcp_listen_port: 11311
