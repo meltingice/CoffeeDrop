@@ -1,0 +1,10 @@
+# RubyDrop configuration file, should be pretty straightforward
+
+# The local filepath where you want to monitor files
+rubydrop_root: ~/RubyDrop
+
+# The address of the server you would like to sync with
+remote_addr: meltingice.net
+
+# ... and the port
+remote_port: 6789
