@@ -1,5 +1,5 @@
 require "FileUtils"
-require_relative "../FSWatcher/filesystemwatcher"
+require_relative "FSWatcher/filesystemwatcher"
 
 class RubyDrop
 	
