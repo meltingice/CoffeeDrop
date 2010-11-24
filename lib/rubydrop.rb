@@ -1,6 +1,5 @@
 require "fileutils"
 require "yaml"
-#require_relative "FSWatcher/filesystemwatcher"
 require_relative "fswatcher"
 
 class RubyDrop
@@ -12,6 +11,10 @@ class RubyDrop
 		# Prepare the document root
 		@@config['rubydrop_root'] = @@config['rubydrop_root'] || "~/RubyDrop"
 		@@config['rubydrop_root'] = File.expand_path(@@config['rubydrop_root'])
+		
+		if ARGV.size > 0 then
+			Grit.debug = true
+		end
 		
 		# Create the filesystem watcher
 		@watcher = FSWatcher.new()
