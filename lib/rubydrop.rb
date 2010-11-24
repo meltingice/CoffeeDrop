@@ -1,40 +1,29 @@
-require "FileUtils"
+require "fileutils"
 require "yaml"
-require_relative "FSWatcher/filesystemwatcher"
+#require_relative "FSWatcher/filesystemwatcher"
+require_relative "fswatcher"
 
 class RubyDrop
 	
 	def initialize()
 		# Load the config
-		@config = YAML.load_file("config.yml")
+		@@config = YAML.load_file("config.yml")
 		
-		@config['rubydrop_root'] = File.expand_path(@config['rubydrop_root'])
-		
-		# Check to make sure the root directory exists
-		if !File.directory? @config['rubydrop_root'] then
-			# If not, create it
-		   FileUtils.mkdir_p @config['rubydrop_root']
-		end
+		# Prepare the document root
+		@@config['rubydrop_root'] = @@config['rubydrop_root'] || "~/RubyDrop"
+		@@config['rubydrop_root'] = File.expand_path(@@config['rubydrop_root'])
 		
 		# Create the filesystem watcher
-		@watcher = FileSystemWatcher.new()
-		@watcher.addDirectory(@config['rubydrop_root'])
+		@watcher = FSWatcher.new()
+	end
+	
+	public
+	
+	def self.config
+		return @@config
 	end
 	
 	def run()
-		@watcher.start do |status, file|
-			if (status == FileSystemWatcher::CREATED) then
-				puts "created: #{file}"
-			elsif (status == FileSystemWatcher::MODIFIED) then
-				puts "modified: #{file}"
-			elsif (status == FileSystemWatcher::DELETED) then
-				puts "deleted: #{file}"
-			else
-				puts "something happened..."
-			end
-		end
-		
-		@watcher.join()
+		@watcher.start()
 	end
-	
 end
