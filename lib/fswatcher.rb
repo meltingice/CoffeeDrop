@@ -11,7 +11,7 @@ class FSWatcher
     
     @interval = RubyDrop.config['check_interval'] || 5
     @run = true
-    @log = Logger.new('log/git.log', 10, 10240000);
+    @log = Logger.new('log/git.log', 10, 1024000);
     if RubyDrop.config['rubydrop_debug'] then
       @log.level = Logger::DEBUG
     else

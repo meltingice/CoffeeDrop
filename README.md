@@ -41,3 +41,28 @@ git init --bare
 </pre>
 
 and that's it! Yes, I'm aware that was a really rough guide. It's only temporary for now anywyas.
+
+<h1>Controlling RubyDrop</h1>
+RubyDrop has a TCP interface that you can use to communicate with it while its running.  The simplest and easiest way to do so is by using telnet.
+
+Here's an example that halts the RubyDrop daemon (by sending 'stop'):
+
+<pre>
+telnet localhost 11311
+Trying 127.0.0.1...
+Connected to localhost.
+Escape character is '^]'.
+Thu Nov 25 03:23:48 2010
+Welcome to RubyDrop
+stop
+RubyDrop daemon halting!
+Connection closed by foreign host.
+</pre>
+
+<h2>TCP Interface Commands</h2>
+* config_get [name]
+  * Retrieves the value from the RubyDrop config specified by [name]
+* stop
+  * Halts the daemon
+* quit
+  * Ends the TCP session, but leaves the daemon and TCP server running
