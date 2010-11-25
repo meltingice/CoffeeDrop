@@ -59,7 +59,34 @@ class FSWatcher
   def start()
     Dir.chdir(RubyDrop.config['rubydrop_root']) do
       
+      # since checking for remote status uses bandwidth each time,
+      # lets only check for it every other interval
+      remote_check = false
+
       while @run do
+        
+        if remote_check then
+          @log.info("====== Checking Remote Status ======")
+          
+          remote_head = @git.native('ls-remote', {}, 'origin', 'HEAD').split("\t")[0].strip
+          local_head = @git.native('rev-parse', {}, 'HEAD').strip
+          
+          @log.info("Current remote: #{remote_head}")
+          @log.info("Current local: #{local_head}")
+          
+          unless remote_head == local_head then
+            @log.info("Remote is ahead, fast-forwarding...")
+            @git.native('pull', {}, 'origin', 'master')
+            @log.info("Fast-forward finished!")
+          end
+          
+          @log.info("====== End Remote Status ======")
+          
+          remote_check = false
+        else
+          remote_check = true
+        end
+        
         @log.info("====== Checking Folder Status ======")
         
         add_count = 0
