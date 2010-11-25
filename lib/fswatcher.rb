@@ -7,10 +7,10 @@ class FSWatcher
 
   attr_accessor :run
 
-  def initialize(options = {})
+  def initialize()
     
-    @interval = options[:interval] || 5
-    @run = options[:run] || true
+    @interval = RubyDrop.config['check_interval'] || 5
+    @run = true
     @log = Logger.new('log/git.log', 10, 10240000);
     if RubyDrop.config['rubydrop_debug'] then
       @log.level = Logger::DEBUG
@@ -29,8 +29,16 @@ class FSWatcher
       if !File.directory? ".git" then
         @log.info("Creating git repository...")
         @repo = Repo.init('.')
+        
+        @git = Git.new(RubyDrop.config['rubydrop_root'] + '/.git')
+        
+        @log.info('Adding remote to git repository')
+        remote = "#{RubyDrop.config['remote_user']}@#{RubyDrop.config['remote_addr']}:#{RubyDrop.config['remote_path']}"
+        #@repo.remote_add('origin', remote)
+        @git.native('remote add', {}, 'origin', remote)
       else
         @log.info("Opening git repository...")
+        @git = Git.new(RubyDrop.config['rubydrop_root'] + '/.git')
         @repo = Repo.new('.')
       end
     end
@@ -50,6 +58,7 @@ class FSWatcher
   
   def start()
     Dir.chdir(RubyDrop.config['rubydrop_root']) do
+      
       while @run do
         @log.info("====== Checking Folder Status ======")
         
@@ -76,10 +85,6 @@ class FSWatcher
           end
         end
         
-        if add_count == 0 && change_count == 0 then
-          @log.info("No changes")
-        end
-        
         if add_count > 0 then
           @log.info(add_count.to_s + " files added, adding...")
           @repo.add('.')
@@ -92,6 +97,18 @@ class FSWatcher
           else
             @log.error("Error committing files?")
           end
+        end
+        
+        if add_count == 0 && change_count == 0 then
+          @log.info("No changes")
+        else
+          @log.info('Pushing changes to remote...')
+          
+          # Unfortunately, at this time, Grit doesn't support remote pushing,
+          # so we have to directly use Git
+          @git.native('push', {}, 'origin', 'master')
+          
+          @log.info('Git push complete!')
         end
         
         add_count = 0

@@ -19,6 +19,8 @@ class RubyDrop
     
     # Create the filesystem watcher
     @watcher = FSWatcher.new()
+    
+    # and the TCP server
     TcpListen.new().start()
   end
   

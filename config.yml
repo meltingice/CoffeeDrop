@@ -1,16 +1,48 @@
 # RubyDrop configuration file, should be pretty straightforward
 
+##
+## Development/debugging options
+##
+
 # Lets you turn debugging mode on and off
+# Warning: git_debug writes to STDOUT and is very verbose
 git_debug: false
 rubydrop_debug: true
 tcp_debug: true
 
+##
+## Local client options
+##
+
 # The local filepath where you want to monitor files
 rubydrop_root: ~/RubyDrop
 
+# How often should RubyDrop check the directory for changes (in seconds)? Defaults to
+# 5 seconds, which should be good for most people.
+check_interval: 5
+
 # The IP that the TCP server should listen on that will let you send
-# commands to the RubyDrop daemon
+# commands to the RubyDrop daemon.
+#
+# For security reasons, this should be a private IP
 tcp_listen_ip: 127.0.0.1
 
 # The port that the TCP server should listen on
 tcp_listen_port: 11311
+
+##
+## Remote git options
+## 
+## These options are mostly used to construct the Git URL to the remote repo
+
+# The remote user
+remote_user: rubydrop
+
+# The remote address (can be IP or hostname)
+remote_addr: meltingice.net
+
+# Remote repository path
+# e.g.: 
+# in: git@github.com:[meltingice/RubyDrop.git]
+# it's what's in the brackets []
+remote_path: RubyDrop.git
