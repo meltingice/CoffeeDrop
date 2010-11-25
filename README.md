@@ -1,6 +1,6 @@
 <h1>RubyDrop</h1>
 
-RubyDrop is my first ever Ruby project that aims to be an open-source, roll-your-own, Dropbox clone using Git as the backend.  There's still a lot of details to work out, so you'll have to bear with me (it's a process).
+RubyDrop is my first ever Ruby project that aims to be an open-source, roll-your-own, Dropbox clone using Git as the backend.  There's still a lot of details to work out, and the code may be a little messy, so you'll have to bear with me (it's a process).
 
 <h1>Prerequisites</h1>
 
@@ -9,7 +9,7 @@ RubyDrop is my first ever Ruby project that aims to be an open-source, roll-your
 
 <h1>How to Run</h1>
 
-While the app doesn't really do much right now, you can start it by simply running:
+You can start RubyDrop by simply running:
 
 <pre>
 ./RubyDrop &
@@ -40,7 +40,7 @@ cd RubyDrop.git
 git init --bare
 </pre>
 
-and that's it! Yes, I'm aware that was a really rough guide. It's only temporary for now anywyas.
+and that's it! Yes, I'm aware that was a really rough guide. It's only temporary for now anyways.
 
 <h1>Controlling RubyDrop</h1>
 RubyDrop has a TCP interface that you can use to communicate with it while its running.  The simplest and easiest way to do so is by using telnet.
