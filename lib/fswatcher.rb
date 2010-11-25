@@ -24,6 +24,8 @@ class FSWatcher
       FileUtils.mkdir_p RubyDrop.config['rubydrop_root']
     end
     
+    Git.git_timeout = 300
+    
     # Now check to see if it's a git repository or not
     Dir.chdir(RubyDrop.config['rubydrop_root']) do
       if !File.directory? ".git" then
@@ -76,6 +78,7 @@ class FSWatcher
           
           unless remote_head == local_head then
             @log.info("Remote is ahead, fast-forwarding...")
+            @git.native('reset', {:hard => true}, 'HEAD')
             @git.native('pull', {}, 'origin', 'master')
             @log.info("Fast-forward finished!")
           end
