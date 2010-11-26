@@ -17,7 +17,7 @@ class TcpListen
     @server = TCPServer.open(@listen, @port)
   end
   
-  def start()
+  def start
     @log.info("Starting TCP server")
     
     # Start a new thread for the TCP server so that it does not block and

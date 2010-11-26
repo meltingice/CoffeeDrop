@@ -58,7 +58,7 @@ class FSWatcher
     end
   end
   
-  def start()
+  def start
     Dir.chdir(RubyDrop.config['rubydrop_root']) do
       
       # since checking for remote status uses bandwidth each time,

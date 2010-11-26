@@ -30,7 +30,7 @@ class RubyDrop
     return @@config
   end
   
-  def run()
+  def run
     @watcher.start()
   end
 end

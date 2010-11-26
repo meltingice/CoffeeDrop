@@ -8,4 +8,4 @@ if RUBY_PLATFORM =~ /(win|w)32$/ then
   exit!
 end
 
-RubyDrop.new().run()
+RubyDrop.new.run
