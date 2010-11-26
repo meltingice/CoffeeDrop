@@ -64,9 +64,11 @@ class FSWatcher
       # since checking for remote status uses bandwidth each time,
       # lets only check for it every other interval
       remote_check = false
-
+      counter = 0
+      
       while @run do
         
+        # only do a remote check every other interval
         if remote_check then
           @log.info("====== Checking Remote Status ======")
           
@@ -139,6 +141,17 @@ class FSWatcher
           @git.native('push', {}, 'origin', 'master')
           
           @log.info('Git push complete!')
+          
+          # clean up the git repo every 10 pushes
+          if counter.modulo(10) == 0 && counter != 0 then
+            @log.info("Cleaning up repository...")
+            @git.native('gc', {:auto => true})
+            @log.info("Cleaning finished!")
+            counter = 0
+          else
+            counter += 1
+          end
+
         end
         
         add_count = 0
