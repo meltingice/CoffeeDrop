@@ -5,6 +5,7 @@ RubyDrop is my first ever Ruby project that aims to be an open-source, roll-your
 <h1>Prerequisites</h1>
 
 * RubyGems
+* RubyInline (gem install RubyInline)
 * <a href="https://github.com/schacon/grit">Grit</a>
 
 <h1>How to Run</h1>

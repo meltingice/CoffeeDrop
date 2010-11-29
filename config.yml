@@ -17,10 +17,6 @@ tcp_debug: true
 # The local filepath where you want to monitor files
 rubydrop_root: ~/RubyDrop
 
-# How often should RubyDrop check the directory for changes (in seconds)? Defaults to
-# 5 seconds, which should be good for most people.
-check_interval: 5
-
 # The IP that the TCP server should listen on that will let you send
 # commands to the RubyDrop daemon.
 #
