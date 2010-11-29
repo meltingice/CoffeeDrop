@@ -23,24 +23,23 @@ After much deliberation, I have decided to go with Git for handling file trackin
 
 Currently, you must manually create the git repo on your remote server. This will be automated as soon as I can write RubyDrop-Server.  If you are new to Git, this is how you do it (assuming you are SSH'd into your remote server):
 
-First, you will probably want to make a new user for RubyDrop, and add your public SSH key to the list of authorized keys for the new user (not shown below)
+First, you will probably want to make a new user for RubyDrop:
+
 <pre>
 adduser rubydrop
 </pre>
 
-Then you will need to make the repository folder
+Then, make it possible for RubyDrop to make a passwordless SSH connection to the server:
+
+["Shortest passwordless ssh tutorial, ever"](http://blogs.translucentcode.org/mick/archives/000230.html)
+
+Finally, you will need to make the repository folder on the remote server:
 <pre>
-cd /home/rubydrop/
-mkdir RubyDrop.git
+cd ~/
+git init RubyDrop.git --bare
 </pre>
 
-and finally, initialize the repository
-<pre>
-cd RubyDrop.git
-git init --bare
-</pre>
-
-and that's it! Yes, I'm aware that was a really rough guide. It's only temporary for now anyways.
+That's it! Yes, I'm aware that was a really rough guide.
 
 <h1>Controlling RubyDrop</h1>
 RubyDrop has a TCP interface that you can use to communicate with it while its running.  The simplest and easiest way to do so is by using telnet.
