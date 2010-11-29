@@ -5,8 +5,6 @@ require_relative 'kqueue/ruby-kqueue' if RUBY_PLATFORM =~ /(darwin|bsd)/
 
 class FSEvent
   
-  include RubyKQueue
-  
   attr_reader :dir
   
   def FSEvent.platform
@@ -27,7 +25,7 @@ class FSEvent
   def watch
     case FSEvent.platform
       when :mac then
-        @thread = Thread.new { Event.handle }
+        @thread = Thread.new { RubyKQueue::Event.handle }
         @thread.join
     end
   end
@@ -36,8 +34,8 @@ class FSEvent
     
     case FSEvent.platform
       when :mac then
-        Event.register(@dir, VNodeEvent, VNodeEvent::WRITE) { yield }
-        Event.register(@dir, VNodeEvent, VNodeEvent::RENAME) { yield }
+        RubyKQueue::Event.register(@dir, RubyKQueue::VNodeEvent, RubyKQueue::VNodeEvent::WRITE) { yield }
+        RubyKQueue::Event.register(@dir, RubyKQueue::VNodeEvent, RubyKQueue::VNodeEvent::RENAME) { yield }
     end
     
   end
