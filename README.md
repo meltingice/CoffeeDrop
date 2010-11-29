@@ -33,7 +33,7 @@ Then, make it possible for RubyDrop to make a passwordless SSH connection to the
 
 ["Shortest passwordless ssh tutorial, ever"](http://blogs.translucentcode.org/mick/archives/000230.html)
 
-Finally, you will need to make the repository folder on the remote server:
+Finally, you will need to make the repository folder on the remote server (login to the remote server the newly created 'rubydrop' user):
 <pre>
 cd ~/
 git init RubyDrop.git --bare
