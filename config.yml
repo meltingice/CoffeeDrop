@@ -36,10 +36,10 @@ tcp_listen_port: 11311
 ## These options are mostly used to construct the Git URL to the remote repo
 
 # The remote user
-remote_user: rubydrop
+remote_user: my_user
 
 # The remote address (can be IP or hostname)
-remote_addr: meltingice.net
+remote_addr: myserver.com
 
 # Remote repository path
 # e.g.: 

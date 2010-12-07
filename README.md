@@ -6,6 +6,7 @@ RubyDrop is my first ever Ruby project that aims to be an open-source, roll-your
 
 * RubyGems
 * <a href="https://github.com/schacon/grit">Grit</a>
+* Ruby 1.9+ (need require_relative function)
 
 <h1>How to Run</h1>
 
