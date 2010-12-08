@@ -1,22 +1,19 @@
 require 'rubygems'
 require 'grit'
+require_relative 'logmodule' 
 
 include Grit
 
 class FSWatcher
 
+  include LoggerModule
   attr_accessor :run
 
   def initialize()
     
     @interval = RubyDrop.config['check_interval'] || 5
     @run = true
-    @log = Logger.new('log/git.log', 10, 1024000);
-    if RubyDrop.config['rubydrop_debug'] then
-      @log.level = Logger::DEBUG
-    else
-      @log.level = Logger::WARN
-    end
+    @log = get_logger('log/git.log', 10, 1024000, RubyDrop.config['rubydrop_debug'] ? Logger::DEBUG : Logger::WARN);
   
     # Check to make sure the root directory exists
     if !File.directory? RubyDrop.config['rubydrop_root'] then
@@ -71,9 +68,16 @@ class FSWatcher
         # only do a remote check every other interval
         if remote_check then
           @log.info("====== Checking Remote Status ======")
-          
-          remote_head = @git.native('ls-remote', {}, 'origin', 'HEAD').split("\t")[0].strip
-          local_head = @git.native('rev-parse', {}, 'HEAD').strip
+
+          remote_head = @git.native('ls-remote', {}, 'origin', 'HEAD')
+
+          if !remote_head.empty? then
+            # only split the result if there was one..for a new/empty repo this can be empty
+            # which is why the check was put in to test for emptiness
+            remote_head = remote_head.split("\t")[0].strip
+          end
+
+	  local_head = @git.native('rev-parse', {}, 'HEAD').strip
           
           @log.info("Current remote: #{remote_head}")
           @log.info("Current local: #{local_head}")

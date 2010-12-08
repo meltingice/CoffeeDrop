@@ -1,18 +1,15 @@
 require 'socket'
+require_relative 'logmodule'
 
 class TcpListen
+
+  include LoggerModule
 
   def initialize()
     @listen = RubyDrop.config['tcp_listen_ip'] || '127.0.0.1'
     @port = RubyDrop.config['tcp_listen_port'] || 11311
     
-    @log = Logger.new('log/tcp.log', 10, 1024000);
-    if RubyDrop.config['tcp_debug'] then
-      @log.level = Logger::DEBUG
-    else
-      @log.level = Logger::WARN
-    end
-    
+    @log = get_logger('log/tcp.log', 10, 1024000, RubyDrop.config['tcp_debug'] ? Logger::DEBUG : Logger::WARN);
     @log.info("Initializing TCP server on #{@listen}:#{@port}")
     @server = TCPServer.open(@listen, @port)
   end
