@@ -1,28 +1,27 @@
 require 'rubygems'
 require 'grit'
+require_relative 'logmodule' 
 
 include Grit
 
 class FSWatcher
 
+  include LoggerModule
   attr_accessor :run
 
   def initialize()
     
     @interval = RubyDrop.config['check_interval'] || 5
     @run = true
-    @log = Logger.new('log/git.log', 10, 1024000);
-    if RubyDrop.config['rubydrop_debug'] then
-      @log.level = Logger::DEBUG
-    else
-      @log.level = Logger::WARN
-    end
+    @log = get_logger('log/git.log', 10, 1024000, RubyDrop.config['rubydrop_debug'] ? Logger::DEBUG : Logger::WARN);
   
     # Check to make sure the root directory exists
     if !File.directory? RubyDrop.config['rubydrop_root'] then
       # If not, create it
       FileUtils.mkdir_p RubyDrop.config['rubydrop_root']
     end
+    
+    Git.git_timeout = 300
     
     # Now check to see if it's a git repository or not
     Dir.chdir(RubyDrop.config['rubydrop_root']) do
@@ -56,26 +55,36 @@ class FSWatcher
     end
   end
   
-  def start()
+  def start
     Dir.chdir(RubyDrop.config['rubydrop_root']) do
       
       # since checking for remote status uses bandwidth each time,
       # lets only check for it every other interval
       remote_check = false
-
+      counter = 0
+      
       while @run do
         
+        # only do a remote check every other interval
         if remote_check then
           @log.info("====== Checking Remote Status ======")
-          
-          remote_head = @git.native('ls-remote', {}, 'origin', 'HEAD').split("\t")[0].strip
-          local_head = @git.native('rev-parse', {}, 'HEAD').strip
+
+          remote_head = @git.native('ls-remote', {}, 'origin', 'HEAD')
+
+          if !remote_head.empty? then
+            # only split the result if there was one..for a new/empty repo this can be empty
+            # which is why the check was put in to test for emptiness
+            remote_head = remote_head.split("\t")[0].strip
+          end
+
+	  local_head = @git.native('rev-parse', {}, 'HEAD').strip
           
           @log.info("Current remote: #{remote_head}")
           @log.info("Current local: #{local_head}")
           
           unless remote_head == local_head then
             @log.info("Remote is ahead, fast-forwarding...")
+            @git.native('reset', {:hard => true}, 'HEAD')
             @git.native('pull', {}, 'origin', 'master')
             @log.info("Fast-forward finished!")
           end
@@ -136,6 +145,17 @@ class FSWatcher
           @git.native('push', {}, 'origin', 'master')
           
           @log.info('Git push complete!')
+          
+          # clean up the git repo every 10 pushes
+          if counter.modulo(10) == 0 && counter != 0 then
+            @log.info("Cleaning up repository...")
+            @git.native('gc', {:auto => true})
+            @log.info("Cleaning finished!")
+            counter = 0
+          else
+            counter += 1
+          end
+
         end
         
         add_count = 0
