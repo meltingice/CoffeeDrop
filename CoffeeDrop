@@ -1,0 +1,4 @@
+#!/usr/bin/env node
+
+var CoffeeDrop = require("./lib/coffeedrop").CoffeeDrop;
+CoffeeDrop.run();

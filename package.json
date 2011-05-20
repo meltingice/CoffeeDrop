@@ -1,0 +1,21 @@
+{
+	"name": 				"coffeedrop",
+	"description": 	"A Dropbox-like program for automatically syncing files to a remote server.",
+	"keywords": 		["coffeedrop", "dropbox", "remote", "sync", "files", "backup"],
+	"author":				"Ryan LeFevre <meltingice8917@gmail.com>",
+	"version": 			"0.0.1",
+	"directories": 	{"lib": "./lib"},
+	"main": 				"./lib/coffeedrop",
+	"bin": 					"./CoffeeDrop",
+	"dependencies":	{
+		"colors": ">= 0.3.0",
+		"cli": ">= 0.3.1",
+		"daemon": ">= 0.3.0",
+		"sqlite": ">= 1.0.4"
+	},
+	"homepage": 		"http://github.com/meltingice/CoffeeDrop",
+	"repository": 	{
+		"type": "git",
+		"url": "git://github.com/meltingice/CoffeeDrop.git"
+	}
+}
