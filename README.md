@@ -22,4 +22,4 @@ Since CoffeeDrop is in such an early state, it is not available to install via N
 	
 # Running
 
-To run CoffeeScript, simply execute the CoffeeScript binary in your Terminal.  Use the --help option to show the help text to see the various commands (most of which are useless at this point in time).
+To run CoffeeDrop, simply execute the CoffeeDrop binary in your Terminal.  Use the --help option to show the help text to see the various commands (most of which are useless at this point in time).
