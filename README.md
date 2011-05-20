@@ -7,6 +7,7 @@ Originally, the project was written in Ruby and was named RubyDrop, but for vari
 # Prerequisites
 
 * NodeJS
+* CoffeeScript (if developing)
 * NPM packages
 	* colors
 	* cli
@@ -17,7 +18,7 @@ Originally, the project was written in Ruby and was named RubyDrop, but for vari
 
 Since CoffeeDrop is in such an early state, it is not available to install via NPM yet. You can install all the dependencies by running:
 
-	npm install colors cli daemon sqlite -g
+	npm install coffee-script colors cli daemon sqlite -g
 	
 # Running
 
