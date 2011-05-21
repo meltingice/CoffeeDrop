@@ -10,7 +10,7 @@ class CoffeeDrop
     args = cli.parse({
       config: ["c", "Path to the config file", "path", "./config.json"]
       daemon: ["d", "Run CoffeeDrop as a daemon"]
-      log:     ["l", "Log debugging commands to file", "path", "./log/debug.log"]
+      log:    ["l", "Log debugging commands to file", "path", "./log/debug.log"]
     }, ["start", "stop", "restart"])
     
     new CoffeeDrop(args, cli.command)

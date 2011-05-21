@@ -1,21 +1,28 @@
 fs  = require('fs')
 
-Log = require('./log').Log
+{Log} = require('./log')
+{DB}  = require('./db')
 
 class Watcher
   constructor: (folder) ->
     @folder = folder
-    
-    # We use an object instead of an array so that we can
-    # quickly reference each file to see if they're being
-    # tracked yet.
-    @files = {}
+    @db = new DB(folder)
     
     try
       fs.statSync(@folder)
+      @start()
     catch error
       Log.debug "Created #{@folder}"
-      fs.mkdirSync(@folder, 0775)
+      @initialize()
+  
+  # Setup the operating environment
+  initialize: ->
+    fs.mkdirSync(@folder, 0775)
+    fs.mkdirSync("#{@folder}/.coffeedrop", 0775)
+    
+    @db.setup =>
+      Log.debug "SQLite database initialized"
+      #@start()
     
   start: ->
     @fileScan(@folder, false)
@@ -30,8 +37,11 @@ class Watcher
       @processFiles(false, path, files)
 
   processFiles: (async, path, files) ->
-    for file in files
-      file = "#{path}/#{file}"
+    for filename in files
+      # Skip hidden dirs
+      continue if filename.substr(0, 1) != "."
+      
+      file = "#{path}/#{filename}"
       
       if async
         fs.stat(file, (err, stats) =>
