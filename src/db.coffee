@@ -23,7 +23,7 @@ class DB
   query: (sql, cb) ->
     @use => @db.execute sql, (err, rows) ->
       Log.error err if err?
-      cb(rows)
+      cb(rows) if cb?
       
   setup: (done) ->
     @use =>
